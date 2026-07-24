@@ -34,6 +34,7 @@ import { AnalyticsView, BroadcastsView } from './components/OperationsViews'
 import { Stage } from './components/Stage'
 import { countries, createInitialSignals, defaultFootballSetup, emojiPuzzles, games, questions, teams, wordPuzzles } from './data'
 import { raidBosses } from './games/raidData'
+import { isEnglish, switchLanguage } from './locale'
 import type { ActivityItem, AnalyticsSnapshot, ChatMessage, ChatStatus, ComboNotice, CosmeticEvent, FootballSetup, GameId, GameSignals, ModerationSettings, NextGameVoteOption, PlatformId, RoundResult, TeamDefinition } from './types'
 
 type ObsStatus = { connected: boolean; streaming: boolean }
@@ -122,15 +123,18 @@ function readGameConfig(): GameConfig {
 }
 
 function readStreamMetadata(): StreamMetadata {
+  const defaults = isEnglish
+    ? { title: 'Live Game Arena', description: 'An interactive live stream where comments become gameplay.', tags: 'live stream, interactive game, quiz' }
+    : { title: 'Canlı Oyun Arenası', description: 'Yorumların oyuna dönüştüğü interaktif canlı yayın.', tags: 'canlı yayın, interaktif oyun, yarışma' }
   try {
     const stored = JSON.parse(window.localStorage.getItem('live-game-animator-stream-metadata') || '{}')
     return {
-      title: String(stored.title || 'Canlı Oyun Arenası'),
-      description: String(stored.description || 'Yorumların oyuna dönüştüğü interaktif canlı yayın.'),
-      tags: String(stored.tags || 'canlı yayın, interaktif oyun, yarışma'),
+      title: String(stored.title || defaults.title),
+      description: String(stored.description || defaults.description),
+      tags: String(stored.tags || defaults.tags),
     }
   } catch {
-    return { title: 'Canlı Oyun Arenası', description: 'Yorumların oyuna dönüştüğü interaktif canlı yayın.', tags: 'canlı yayın, interaktif oyun, yarışma' }
+    return defaults
   }
 }
 
@@ -138,16 +142,16 @@ function buildDemoContext(game: GameId, round: number, footballSetup: FootballSe
   if (game === 'football') return { game, round, continuous, commands: [footballSetup.home.command, footballSetup.away.command] }
   if (game === 'quiz') return { game, round, continuous, commands: ['A', 'B', 'C', 'D'] }
   if (game === 'numbers') return { game, round, continuous, commands: ['1', '2'] }
-  if (game === 'pickaxe') return { game, round, continuous, commands: ['tnt', 'hızlı', 'yavaş', 'büyük', 'tahta', 'taş', 'demir', 'altın', 'elmas', 'netherite', 'mega'] }
-  if (game === 'raid') return { game, round, continuous, commands: ['vur', 'iyileş', 'vur', 'iyileş', 'saldır'] }
-  if (game === 'tetris') return { game, round, continuous, commands: ['sol', 'sağ', 'döndür', 'indir', 'sol', 'indir'] }
+  if (game === 'pickaxe') return { game, round, continuous, commands: isEnglish ? ['tnt', 'fast', 'slow', 'big', 'wood', 'stone', 'iron', 'gold', 'diamond', 'netherite', 'mega'] : ['tnt', 'hızlı', 'yavaş', 'büyük', 'tahta', 'taş', 'demir', 'altın', 'elmas', 'netherite', 'mega'] }
+  if (game === 'raid') return { game, round, continuous, commands: isEnglish ? ['hit', 'heal', 'attack', 'heal', 'hit'] : ['vur', 'iyileş', 'vur', 'iyileş', 'saldır'] }
+  if (game === 'tetris') return { game, round, continuous, commands: isEnglish ? ['left', 'right', 'rotate', 'drop', 'left', 'drop'] : ['sol', 'sağ', 'döndür', 'indir', 'sol', 'indir'] }
   if (game === 'wheel') {
     const commands = Array.from({ length: 8 }, (_, index) => countries[(round * 7 + index * 19) % countries.length].name)
     return { game, round, continuous, commands }
   }
   const puzzles = game === 'emoji' ? emojiPuzzles : wordPuzzles
   const answer = puzzles[round % puzzles.length].answer
-  const commands = [answer, answer.toLocaleUpperCase('tr-TR'), `${answer}?`, `bence ${answer}`]
+  const commands = [answer, answer.toLocaleUpperCase(isEnglish ? 'en-US' : 'tr-TR'), `${answer}?`, isEnglish ? `I think ${answer}` : `bence ${answer}`]
   return { game, round, continuous, commands }
 }
 
@@ -812,6 +816,7 @@ export default function App() {
         <header className="topbar">
           <div><div className="eyebrow"><span /> YAYIN KONTROLÜ</div><h1>İyi akşamlar, <em>yayına hazırız.</em></h1></div>
           <div className="topbar-actions">
+            <button className="language-switch" onClick={() => switchLanguage(isEnglish ? 'tr' : 'en')} aria-label={isEnglish ? 'Türkçe sürüme geç' : 'Switch to English'}>{isEnglish ? 'TR' : 'EN'}</button>
             <div className={`connection-pill ${chatStatus.connected ? 'connected' : ''}`}><span /> {chatStatus.connected ? `${chatStatus.mode === 'demo' ? 'DEMO' : 'YORUMLAR'} BAĞLI` : 'YORUMLAR KAPALI'}</div>
             <div className={`connection-pill ${obs.connected ? 'connected' : ''}`}><span /> {obs.connected ? 'OBS BAĞLI' : 'OBS BAĞLI DEĞİL'}</div>
             <button className="icon-button" onClick={() => setSoundEnabled((value) => !value)} aria-label={soundEnabled ? 'Yayın seslerini kapat' : 'Yayın seslerini aç'}>{soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}</button>
@@ -925,7 +930,7 @@ export default function App() {
                 </div>
                 <button className="demo-button" onClick={() => void saveModeration()}><ShieldCheck size={16} /> Moderasyonu kaydet</button>
               </div>
-              <div className="browser-source-card"><Gamepad2 size={19} /><div><strong>OBS Tarayıcı Kaynağı</strong><code>http://127.0.0.1:5173/?stage=1</code></div></div>
+              <div className="browser-source-card"><Gamepad2 size={19} /><div><strong>OBS Tarayıcı Kaynağı</strong><code>{`${window.location.origin}/?stage=1${isEnglish ? '&lang=en' : ''}`}</code></div></div>
             </div>
           </div>
           <footer><button className="ghost-button" onClick={() => setSettingsOpen(false)}>Kapat</button><button className="save-button" onClick={() => { setSettingsOpen(false); setNotice({ tone: 'success', text: 'Yayın ve yorum ayarları hazır.' }) }}><Check size={16} /> Ayarları kullan</button></footer>

@@ -1,36 +1,41 @@
 # Live Game Animator
 
-YouTube ve TikTok canlı yayın yorumlarını OBS üzerinde oynanan etkileşimli oyunlara dönüştüren yerel yayın otomasyonu.
+Interactive YouTube and TikTok live-stream games controlled by chat comments. Built for OBS with 16:9 and 9:16 layouts.
 
-## Özellikler
+## English
 
-- 9 oyun: Boss Raid, Ülke Çarkı, Halı Saha, Bilgi Yarışması, Emoji Bil, Kelime Avı, Sayı Kapışması, Falling Pickaxe ve Tetris
-- YouTube canlı yorumları ve TikTok/harici webhook köprüsü
-- OBS WebSocket ve Browser Source desteği
-- 16:9 ve 9:16 yayın görünümü
-- Otomatik rotasyon, sonsuz mod, XP/liderlik, moderasyon ve analiz
-- Komutlarda `!` işareti isteğe bağlıdır
+### Features
 
-## Kurulum
+- 9 games: Boss Raid, Country Wheel, Football, Trivia Quiz, Guess the Emoji, Word Hunt, Number Battle, Falling Pickaxe and Tetris
+- YouTube live comments and TikTok/external webhook bridge
+- OBS WebSocket, automatic rotation, infinite mode, moderation, XP and analytics
+- English interface, content and commands; `!` is optional
 
-Gereksinimler: Node.js 20+, OBS Studio 28+ ve Windows 10/11.
+### Run
 
 ```bash
 npm ci
 npm run dev
 ```
 
-- Kontrol paneli: `http://127.0.0.1:5173/`
-- OBS Browser Source: `http://127.0.0.1:5173/?stage=1`
+- English dashboard: `http://127.0.0.1:5173/?lang=en`
+- English OBS source: `http://127.0.0.1:5173/?stage=1&lang=en`
 
-Üretim kontrolü:
+## Türkçe
+
+YouTube ve TikTok canlı yayın yorumlarını OBS üzerinde oynanan etkileşimli oyunlara dönüştürür.
+
+- Türkçe panel: `http://127.0.0.1:5173/`
+- Türkçe OBS kaynağı: `http://127.0.0.1:5173/?stage=1`
+
+Gereksinimler: Node.js 20+, OBS Studio 28+ ve Windows 10/11.
 
 ```bash
 npm run check:release
 ```
 
-API anahtarları, OBS parolası ve yayın anahtarı yalnızca çalışan uygulamanın belleğinde tutulur. Gerçek kimlik bilgilerini veya `.live-game-animator/` klasörünü Git'e eklemeyin.
+Secrets are kept in process memory. Never commit API keys, stream keys, OBS passwords or `.live-game-animator/`.
 
-## Lisans
+## License
 
-[Apache License 2.0](LICENSE). Üçüncü taraf bilgileri için [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) dosyasına bakın.
+[Apache License 2.0](LICENSE) · [Third-party notices](THIRD_PARTY_NOTICES.md)

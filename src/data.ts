@@ -1,6 +1,8 @@
 import type { FootballSetup, GameDefinition, GameSignals, TeamDefinition } from './types'
+import { englishEmojiPuzzles, englishGames, englishQuestions, englishWordPuzzles } from './englishData'
+import { isEnglish } from './locale'
 
-export const games: GameDefinition[] = [
+const gamesTr: GameDefinition[] = [
   {
     id: 'football',
     name: 'Halı Saha Arenası',
@@ -84,7 +86,9 @@ export const games: GameDefinition[] = [
   },
 ]
 
-export const questions = [
+export const games: GameDefinition[] = isEnglish ? englishGames : gamesTr
+
+const questionsTr = [
   { category: 'Coğrafya', question: 'Dünyanın yüzölçümü bakımından en büyük ülkesi hangisidir?', answers: ['Kanada', 'Çin', 'Rusya', 'ABD'], correct: 2 },
   { category: 'Bilim', question: 'Işığın boşluktaki hızı yaklaşık kaç km/s’dir?', answers: ['30 bin', '150 bin', '300 bin', '1 milyon'], correct: 2 },
   { category: 'Spor', question: 'Bir futbol takımı sahaya kaç oyuncuyla çıkar?', answers: ['9', '10', '11', '12'], correct: 2 },
@@ -167,10 +171,12 @@ export const questions = [
   { category: 'Teknoloji', question: 'Bulut bilişimde veriler çoğunlukla nerede işlenir?', answers: ['Uzak sunucularda', 'Yalnızca klavyede', 'Ekran kartı kablosunda', 'Yazıcı kartuşunda'], correct: 0 },
 ]
 
+export const questions = isEnglish ? englishQuestions : questionsTr
+
 const sovereignCountryCodes = `AF AL DZ AD AO AG AR AM AU AT AZ BS BH BD BB BY BE BZ BJ BT BO BA BW BR BN BG BF BI CV KH CM CA CF TD CL CN CO KM CG CD CR CI HR CU CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FJ FI FR GA GM GE DE GH GR GD GT GN GW GY HT HN HU IS IN ID IR IQ IE IL IT JM JP JO KZ KE KI KP KR KW KG LA LV LB LS LR LY LI LT LU MG MW MY MV ML MT MH MR MU MX FM MD MC MN ME MA MZ MM NA NR NP NL NZ NI NE NG MK NO OM PK PW PS PA PG PY PE PH PL PT QA RO RU RW KN LC VC WS SM ST SA SN RS SC SL SG SK SI SB SO ZA SS ES LK SD SR SE CH SY TW TJ TZ TH TL TG TO TT TN TR TM TV UG UA AE GB US UY UZ VU VA VE VN YE ZM ZW XK`.split(' ')
 
-const countryNames = new Intl.DisplayNames(['tr'], { type: 'region' })
-const countryNameOverrides: Record<string, string> = {
+const countryNames = new Intl.DisplayNames([isEnglish ? 'en' : 'tr'], { type: 'region' })
+const countryNameOverrides: Record<string, string> = isEnglish ? {} : {
   BO: 'Bolivya', BN: 'Brunei', CD: 'Demokratik Kongo Cumhuriyeti', CG: 'Kongo Cumhuriyeti',
   CI: 'Fildişi Sahili', CV: 'Yeşil Burun Adaları', CZ: 'Çekya', GB: 'Birleşik Krallık',
   IR: 'İran', KP: 'Kuzey Kore', KR: 'Güney Kore', LA: 'Laos', MD: 'Moldova',
@@ -233,7 +239,7 @@ export const teams: TeamDefinition[] = [
 
 export const defaultFootballSetup: FootballSetup = { home: teams[0], away: teams[1] }
 
-export const emojiPuzzles = [
+const emojiPuzzlesTr = [
   { emoji: '🌈', clues: ['gök', 'renk', 'yağmur'], answer: 'gökkuşağı' },
   { emoji: '☕ ❤️', clues: ['sıcak', 'fincan', 'mola'], answer: 'kahve' },
   { emoji: '🧭 🗺️', clues: ['yol', 'keşif', 'serüven'], answer: 'macera' },
@@ -315,6 +321,8 @@ export const emojiPuzzles = [
   { emoji: '🛒 🧾', clues: ['alışveriş', 'raf', 'kasa'], answer: 'market' },
   { emoji: '📮 ✉️', clues: ['mektup', 'zarf', 'gönderi'], answer: 'posta' },
 ]
+
+export const emojiPuzzles = isEnglish ? englishEmojiPuzzles : emojiPuzzlesTr
 
 const wordBank = [
   { category: 'Yayın', answer: 'kamera', hint: 'Yayının görüntüsünü yakalar' },
@@ -462,10 +470,12 @@ const scrambleWord = (answer: string, index: number) => {
   return letters.join(' ')
 }
 
-export const wordPuzzles = wordBank.map((puzzle, index) => ({
+const wordPuzzlesTr = wordBank.map((puzzle, index) => ({
   ...puzzle,
   scrambled: scrambleWord(puzzle.answer, index),
 }))
+
+export const wordPuzzles = isEnglish ? englishWordPuzzles : wordPuzzlesTr
 
 export const createInitialSignals = (): GameSignals => ({
   totalMessages: 0,

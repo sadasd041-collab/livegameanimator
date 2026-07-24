@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Eye, Heart, MessageCircle, Radio } from 'lucide-react'
 import { playSoundCue } from '../audio'
 import { games } from '../data'
+import { isEnglish } from '../locale'
 import { CountryWheel } from '../games/CountryWheel'
 import { FootballGame } from '../games/FootballGame'
 import { QuizGame } from '../games/QuizGame'
@@ -40,13 +41,13 @@ function commandsForGame(game: GameId, footballSetup: FootballSetup): StageComma
     { token: footballSetup.away.command.toUpperCase(), label: footballSetup.away.shortName },
   ]
   if (game === 'quiz') return ['A', 'B', 'C', 'D'].map((token) => ({ token }))
-  if (game === 'wheel') return [{ token: 'ÜLKE ADI', label: 'Örn. Türkiye' }]
-  if (game === 'emoji') return [{ token: 'TAHMİNİN', label: 'Cevabı yaz' }]
-  if (game === 'word') return [{ token: 'KELİME', label: 'Cevabı yaz' }]
-  if (game === 'numbers') return [{ token: '1', label: 'Sol taraf' }, { token: '2', label: 'Sağ taraf' }]
-  if (game === 'raid') return [{ token: 'VUR', label: 'Bossa saldır' }, { token: 'İYİLEŞ', label: 'Can doldur' }]
-  if (game === 'tetris') return [{ token: 'SOL' }, { token: 'SAĞ' }, { token: 'DÖNDÜR' }, { token: 'İNDİR' }]
-  return ['TNT', 'MEGA', 'HIZLI', 'YAVAŞ', 'BÜYÜK', 'TAHTA', 'TAŞ', 'DEMİR', 'ALTIN', 'ELMAS', 'NETHERITE'].map((token) => ({ token }))
+  if (game === 'wheel') return [{ token: isEnglish ? 'COUNTRY NAME' : 'ÜLKE ADI', label: isEnglish ? 'e.g. Canada' : 'Örn. Türkiye' }]
+  if (game === 'emoji') return [{ token: isEnglish ? 'YOUR GUESS' : 'TAHMİNİN', label: isEnglish ? 'Type the answer' : 'Cevabı yaz' }]
+  if (game === 'word') return [{ token: isEnglish ? 'WORD' : 'KELİME', label: isEnglish ? 'Type the answer' : 'Cevabı yaz' }]
+  if (game === 'numbers') return [{ token: '1', label: isEnglish ? 'Left side' : 'Sol taraf' }, { token: '2', label: isEnglish ? 'Right side' : 'Sağ taraf' }]
+  if (game === 'raid') return isEnglish ? [{ token: 'HIT', label: 'Attack the boss' }, { token: 'HEAL', label: 'Restore health' }] : [{ token: 'VUR', label: 'Bossa saldır' }, { token: 'İYİLEŞ', label: 'Can doldur' }]
+  if (game === 'tetris') return (isEnglish ? ['LEFT', 'RIGHT', 'ROTATE', 'DROP'] : ['SOL', 'SAĞ', 'DÖNDÜR', 'İNDİR']).map((token) => ({ token }))
+  return (isEnglish ? ['TNT', 'MEGA', 'FAST', 'SLOW', 'BIG', 'WOOD', 'STONE', 'IRON', 'GOLD', 'DIAMOND', 'NETHERITE'] : ['TNT', 'MEGA', 'HIZLI', 'YAVAŞ', 'BÜYÜK', 'TAHTA', 'TAŞ', 'DEMİR', 'ALTIN', 'ELMAS', 'NETHERITE']).map((token) => ({ token }))
 }
 
 export function Stage({ game, round, running, progress, vertical, signals, footballSetup, soundEnabled = true, soundVolume = .45, roundResult = null, cosmeticEvent = null, comboNotice = null, nextVoteOpen = false, nextVoteOptions = [], continuous = false, clean = false }: StageProps) {
