@@ -2,6 +2,8 @@
 
 Interactive YouTube and TikTok live-stream games controlled by chat comments. Built for OBS with 16:9 and 9:16 layouts.
 
+![Live Game Animator dashboard](docs/images/dashboard-en.png)
+
 ## English
 
 ### Features
@@ -10,6 +12,16 @@ Interactive YouTube and TikTok live-stream games controlled by chat comments. Bu
 - YouTube live comments and TikTok/external webhook bridge
 - OBS WebSocket, automatic rotation, infinite mode, moderation, XP and analytics
 - English interface, content and commands; `!` is optional
+
+### Game Gallery
+
+| Boss Raid | Country Wheel | Football |
+| --- | --- | --- |
+| ![Boss Raid](docs/images/boss-raid.jpg) | ![Country Wheel](docs/images/country-wheel.jpg) | ![Football](docs/images/football.jpg) |
+| Trivia Quiz | Guess the Emoji | Word Hunt |
+| ![Trivia Quiz](docs/images/trivia-quiz.jpg) | ![Guess the Emoji](docs/images/emoji-riddle.jpg) | ![Word Hunt](docs/images/word-hunt.jpg) |
+| Number Battle | Falling Pickaxe | Tetris |
+| ![Number Battle](docs/images/number-battle.jpg) | ![Falling Pickaxe](docs/images/falling-pickaxe.jpg) | ![Tetris](docs/images/tetris.jpg) |
 
 ### Run
 
@@ -24,6 +36,8 @@ npm run dev
 ## Türkçe
 
 YouTube ve TikTok canlı yayın yorumlarını OBS üzerinde oynanan etkileşimli oyunlara dönüştürür.
+
+![Live Game Animator Türkçe kontrol paneli](docs/images/dashboard-tr.jpg)
 
 - Türkçe panel: `http://127.0.0.1:5173/`
 - Türkçe OBS kaynağı: `http://127.0.0.1:5173/?stage=1`
