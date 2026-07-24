@@ -1,0 +1,30 @@
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.local
+*.pid
+*.log
+
+# Runtime state, analytics, chat history and local automation traces
+.live-game-animator/
+.agents/
+.codex/
+.openai/
+
+# Editor and operating-system metadata
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Never commit broadcast credentials or local OBS profiles.
+stream-keys.*
+obs-profile/
